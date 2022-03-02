@@ -11,7 +11,7 @@ deploy:
       uses: actions/checkout@main
 
     - name: 'Deploy to AKS'
-      uses: Gemeente-DenHaag/custom-actions/deploy-to-aks@v0.0.1
+      uses: Gemeente-DenHaag/custom-actions/deploy-to-aks@v0.0.1-dta
       with:
         credentials: '${{ secrets.SUPERSECRET_CREDENTIALS }}'
         resource-group: '${{ secrets.SUPERSECRET_RG }}'
