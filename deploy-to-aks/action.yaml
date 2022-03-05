@@ -21,10 +21,7 @@ inputs:
     default: generic
   release-name:
     required: true
-    description: "The name of the release used by Helm"
-  values-file:
-    required: false
-    description: "The location and name of the values file used for Helm"
+    description: "The name of the release used by Helm"  
   values-files:
     required: true
     description: "The location and name of the values file used for Helm. Multipe files possible: values.yaml,values-test.yaml. Most right takes precendence."
