@@ -52,7 +52,7 @@ runs:
       shell: bash
       id: prep
       run: |
-        inputvaluesfiles=${{ inputs.values-files}}
+        inputvaluesfiles="${{ inputs.values-files}}"
         for i in ${inputvaluesfiles//,/ }
         do
             valuesfiles+=" -f ${i}"
