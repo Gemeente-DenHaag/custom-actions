@@ -23,8 +23,11 @@ inputs:
     required: true
     description: "The name of the release used by Helm"
   values-file:
-    required: true
+    required: false
     description: "The location and name of the values file used for Helm"
+  values-files:
+    required: true
+    description: "The location and name of the values file used for Helm. Multipe files possible: values.yaml,values-test.yaml. Most right takes precendence."
   namespace:
     required: true
     description: "The namespace of the AKS cluster to deploy to"
@@ -44,6 +47,17 @@ runs:
         creds: '${{ inputs.credentials }}'
         resource-group: '${{ inputs.resource-group }}'
         cluster-name: '${{ inputs.cluster-name }}'
+
+    - name: 'Determine values files'
+      shell: bash
+      id: prep
+      run: |
+        for i in ${ ${{ inputs.values-files }}//,/ }
+        do
+            valuesfiles+=" -f ${i}"
+        done
+        echo "values files to use: ${valuesfiles}"
+        echo "::set-output name=VALUESFILES::${valuesfiles}"
       
     - name: 'Deploy to AKS'
       shell: bash
@@ -52,7 +66,7 @@ runs:
         --repo ${{ inputs.repo }}
         ${{ inputs.release-name }}
         ${{ inputs.chart }}
-        -f ${{ inputs.values-file }}
+        ${{ steps.prep.outputs.VALUESFILES }}
         -n ${{ inputs.namespace }}
         --set image.fullImage=${{ inputs.full-image-url }}
         ${{ inputs.extra-params }}
