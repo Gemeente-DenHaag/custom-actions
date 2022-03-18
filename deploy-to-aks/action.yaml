@@ -5,12 +5,9 @@ inputs:
   api-server-url:
     required: true
     description: "The url of the API server for Kubernetes"
-  sa-secret-name:
+  sa-secret:
     required: true
-    description: "The name of the secret for the service-account"
-  sa-secret-token:
-    required: true
-    description: "The token of the secret for the service-account"
+    description: "The secret object for for the service-account"
   repo:
     required: false
     description: "The url of the helm repo"
@@ -42,8 +39,7 @@ runs:
       with:
         method: service-account
         k8s-url: '${{ inputs.api-server-url }}'
-        k8s-secret: '${{ inputs.sa-secret-name }}'
-        token: '${{ inputs.sa-secret-token }}'
+        k8s-secret: '${{ inputs.sa-secret }}'
 
     - name: 'Determine values files'
       shell: bash
