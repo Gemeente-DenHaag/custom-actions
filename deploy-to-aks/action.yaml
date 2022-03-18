@@ -2,15 +2,15 @@ name: "Deploy to AKS"
 description: "Deploys the app with Helm to AKS"
 
 inputs:
-  credentials:
+  api-server-url:
     required: true
-    description: "The credentials used to login to AKS"
-  resource-group:
+    description: "The url of the API server for Kubernetes"
+  sa-secret-name:
     required: true
-    description: "The resource-group in Azure where the cluster is located"
-  cluster-name:
+    description: "The name of the secret for the service-account"
+  sa-secret-token:
     required: true
-    description: "The cluster-name in Azure where the cluster is located"
+    description: "The token of the secret for the service-account"
   repo:
     required: false
     description: "The url of the helm repo"
@@ -23,7 +23,7 @@ inputs:
     required: true
     description: "The name of the release used by Helm"  
   values-files:
-    required: true
+    required: false
     description: "The location and name of the values file used for Helm. Multipe files possible: values.yaml,values-test.yaml. Most right takes precendence."
   namespace:
     required: true
@@ -38,12 +38,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 'Login to aks and set context'
-      uses: azure/aks-set-context@v1
+    - uses: azure/k8s-set-context@v2
       with:
-        creds: '${{ inputs.credentials }}'
-        resource-group: '${{ inputs.resource-group }}'
-        cluster-name: '${{ inputs.cluster-name }}'
+        method: service-account
+        k8s-url: '${{ inputs.api-server-url }}'
+        k8s-secret: '${{ inputs.sa-secret-name }}'
+        token: '${{ inputs.sa-secret-token }}'
 
     - name: 'Determine values files'
       shell: bash
