@@ -56,7 +56,7 @@ runs:
     - name: 'Deploy to AKS'
       shell: bash
       run: >
-        helm upgrade --install --wait
+        helm upgrade --install --wait --atomic
         --repo ${{ inputs.repo }}
         ${{ inputs.release-name }}
         ${{ inputs.chart }}
